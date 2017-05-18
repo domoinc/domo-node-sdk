@@ -1,9 +1,0 @@
-{
-    "presets": ["es2015"],
-    "env": {
-    	"production": {
-    		"ignore": ["**/*.spec.js"],
-    		"presets": ["babili"]
-    	}
-    }
-}
