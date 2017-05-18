@@ -16,11 +16,5 @@
     "new-cap": [0, {"newIsCap": false}],
     "no-param-reassign": 0,
     "max-len": ["error", 200]
-  },
-  "globals": {
-    "sinon": false,
-    "expect": false,
-    "angular": false,
-    "inject": false
   }
 }
