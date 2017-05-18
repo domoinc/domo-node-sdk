@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-expressions */
-import sinon from 'sinon';
-import { expect } from 'chai';
+const sinon = require('sinon');
+const expect = require('chai').expect;
 
-import StreamClient from './stream-client';
-import TransportClient from '../common/transport';
-import { UpdateMethod, HTTPMethod } from '../common/constants';
+const StreamClient = require('./stream-client');
+const TransportClient = require('../common/transport');
+const HTTPMethod = require('../common/constants').HTTPMethod;
+const UpdateMethod = require('../common/constants').UpdateMethod;
 
 describe('(Client): Stream', () => {
   let client;

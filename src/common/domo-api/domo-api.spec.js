@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions */
-import sinon from 'sinon';
-import { expect } from 'chai';
+const sinon = require('sinon');
+const expect = require('chai').expect;
 
-import DomoAPIClient from './domo-api';
-import TransportClient from '../transport';
-import { HTTPMethod } from '../constants';
+const DomoAPIClient = require('./domo-api');
+const TransportClient = require('../transport');
+const HTTPMethod = require('../constants').HTTPMethod;
 
 describe('(Base): DomoAPIClient', () => {
   let transport;

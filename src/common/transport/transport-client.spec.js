@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-expressions */
-import sinon from 'sinon';
-import nock from 'nock';
-import { expect } from 'chai';
-import TransportClient from './transport-client';
+const sinon = require('sinon');
+const nock = require('nock');
+const expect = require('chai').expect;
+const TransportClient = require('./transport-client');
 
 describe('(Base): TransportClient', () => {
   let client;

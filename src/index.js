@@ -1,8 +1,8 @@
-import TransportClient from './common/transport';
-import DatasetClient from './datasets';
-import StreamClient from './streams';
-import UserClient from './users';
-import GroupClient from './groups';
+const TransportClient = require('./common/transport');
+const DatasetClient = require('./datasets');
+const StreamClient = require('./streams');
+const UserClient = require('./users');
+const GroupClient = require('./groups');
 
 class Domo {
   constructor(clientId, clientSecret, host) {

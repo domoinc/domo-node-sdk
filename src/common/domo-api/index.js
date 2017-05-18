@@ -1,3 +1,1 @@
-import DomoAPIClient from './domo-api';
-
-module.exports = DomoAPIClient;
+module.exports = require('./domo-api');
