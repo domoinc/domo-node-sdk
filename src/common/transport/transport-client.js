@@ -1,5 +1,5 @@
-import { TransportClientError } from '../errors';
-import rp from 'request-promise';
+const TransportClientError = require('../errors').TransportClientError;
+const rp = require('request-promise-native');
 const debug = require('debug')('domo-sdk');
 
 class TransportClient {

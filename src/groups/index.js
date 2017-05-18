@@ -1,3 +1,1 @@
-import Client from './group-client';
-
-module.exports = Client;
+module.exports = require('./group-client');

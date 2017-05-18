@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions */
-import sinon from 'sinon';
-import { expect } from 'chai';
+const sinon = require('sinon');
+const expect = require('chai').expect;
 
-import UserClient from './user-client';
-import TransportClient from '../common/transport';
-import { HTTPMethod } from '../common/constants';
+const UserClient = require('./user-client');
+const TransportClient = require('../common/transport');
+const HTTPMethod = require('../common/constants').HTTPMethod;
 
 describe('(Client): User', () => {
   let client;

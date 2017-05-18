@@ -1,6 +1,4 @@
-'use strict';
-
-const Domo = require('../dist');
+const Domo = require('../src');
 
 const clientId = process.env.DOMO_CLIENT_ID;
 const clientSecret = process.env.DOMO_CLIENT_SECRET;

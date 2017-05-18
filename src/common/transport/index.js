@@ -1,3 +1,1 @@
-import TransportClient from './transport-client';
-
-module.exports = TransportClient;
+module.exports = require('./transport-client');

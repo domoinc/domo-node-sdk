@@ -1,3 +1,1 @@
-import DatasetClient from './dataset-client';
-
-module.exports = DatasetClient;
+module.exports = require('./dataset-client');

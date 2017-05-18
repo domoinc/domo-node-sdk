@@ -1,3 +1,1 @@
-import Client from './stream-client';
-
-module.exports = Client;
+module.exports = require('./stream-client');

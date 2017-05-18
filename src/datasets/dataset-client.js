@@ -1,5 +1,5 @@
-import DomoAPIClient from '../common/domo-api';
-import { HTTPMethod } from '../common/constants';
+const DomoAPIClient = require('../common/domo-api');
+const HTTPMethod = require('../common/constants').HTTPMethod;
 
 class DatasetClient extends DomoAPIClient {
   constructor(transport) {

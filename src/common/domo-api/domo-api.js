@@ -1,6 +1,6 @@
-import TransportClient from '../transport';
-import { HTTPMethod } from '../constants';
-import { DomoAPIClientError } from '../errors';
+const TransportClient = require('../transport');
+const HTTPMethod = require('../constants').HTTPMethod;
+const DomoAPIClientError = require('../errors').DomoAPIClientError;
 
 class DomoAPIClient {
   constructor(transport) {
