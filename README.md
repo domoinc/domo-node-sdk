@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="domo.png" width="400" height="400"/>
+  <img src="https://github.com/domoinc/domo-node-sdk/blob/master/domo.png?raw=true" width="400" height="400"/>
 </div>
 
 # NodeJS - Domo API SDK
@@ -30,14 +30,18 @@
 
 ### Setup
 * Install NodeJS/npm: https://nodejs.org/en/download/
-    * Linux: 'apt-get install nodejs'
-    * MacOS: 'brew install nodejs'
+    * Linux: `apt-get install nodejs`
+    * MacOS: `brew install nodejs`
     * Windows: direct download, or use Bash on Windows 10
+* Install module
+    
+        $ npm install --save domo-sdk
 
 ### Updates
 * View the [changelog](CHANGELOG.md)
 
 ### Usage
+* See `/examples` for full usage
 * Create an API Client on the [Domo Developer Portal](https://developer.domo.com/)
 * Use your API Client id/secret to instantiate an SDK instance
 * Multiple API Clients can be used by instantiating multiple SDK clients
