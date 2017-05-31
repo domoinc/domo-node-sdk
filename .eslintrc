@@ -1,0 +1,20 @@
+{
+  "extends": "airbnb/base",
+  "env": {
+    "mocha": true,
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "comma-dangle": [0, "always-multiline"],
+    "no-use-before-define": [2, "nofunc"],
+    "no-underscore-dangle": ["off", {"allow": ["_id"]}],
+    "spaced-comment": [0, "never"],
+    "array-callback-return": [0],
+    "arrow-body-style": [0, "as-needed"],
+    "new-cap": [0, {"newIsCap": false}],
+    "no-param-reassign": 0,
+    "max-len": ["error", 200]
+  }
+}
