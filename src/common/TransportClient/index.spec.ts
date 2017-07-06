@@ -1,24 +1,25 @@
-/* eslint-disable no-unused-expressions */
-const sinon = require('sinon');
-const nock = require('nock');
-const expect = require('chai').expect;
-const TransportClient = require('./transport-client');
+import sinon from 'sinon';
+import nock from 'nock';
+import { expect } from 'chai';
+
+/* tslint:disable-next-line:import-name */
+import TransportClient from '.';
 
 describe('(Base): TransportClient', () => {
   let client;
 
-  beforeEach(done => {
+  beforeEach((done) => {
     client = new TransportClient('test', 'test');
     done();
   });
 
-  it('should instantiate', done => {
+  it('should instantiate', (done) => {
     expect(TransportClient).to.exist;
     expect(TransportClient).to.be.an.instanceOf(Function);
     done();
   });
 
-  it('should require API credentials', done => {
+  it('should require API credentials', (done) => {
     try {
       const newClient = new TransportClient();
       expect(newClient).to.not.exist;
@@ -30,10 +31,10 @@ describe('(Base): TransportClient', () => {
     }
   });
 
-  it('should have REST methods', done => {
+  it('should have REST methods', (done) => {
     const expectedFunctions = ['get', 'post', 'put', 'patch', 'delete'];
 
-    expectedFunctions.forEach(fn => {
+    expectedFunctions.forEach((fn) => {
       expect(client[fn]).to.exist;
       expect(client[fn]).to.be.an.instanceOf(Function);
     });
@@ -63,8 +64,13 @@ describe('(Base): TransportClient', () => {
   });
 
   it('should auto-renew expired tokens', done => {
-    nock('https://api.domo.com').get('/v1/users').reply(400);
-    nock('https://api.domo.com').get('/oauth/token?grant_type=client_credentials&scope=data%20user').reply(200, { access_token: 'test' });
+    nock('https://api.domo.com')
+      .get('/v1/users')
+      .reply(400);
+
+    nock('https://api.domo.com')
+      .get('/oauth/token?grant_type=client_credentials&scope=data%20user')
+      .reply(200, { access_token: 'test' });
 
     const tokenSpy = sinon.spy(client, '_tokenExpired');
     const renewSpy = sinon.spy(client, '_renewAccessToken');

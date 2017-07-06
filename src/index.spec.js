@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-expressions */
-const expect = require('chai').expect;
-const DomoSDK = require('./');
-const TransportClient = require('./common/transport');
-const DatasetClient = require('./datasets');
-const GroupClient = require('./groups');
-const StreamClient = require('./streams');
-const UserClient = require('./users');
+import { expect } from 'chai';
+import DomoSDK from './';
+import TransportClient from './common/TransportClient';
+import DatasetClient from './DatasetClient';
+import GroupClient from './GroupClient';
+import StreamClient from './StreamClient';
+import UserClient from './UserClient';
 
 describe('(Base): DomoSDK', () => {
   it('should instantiate', done => {
