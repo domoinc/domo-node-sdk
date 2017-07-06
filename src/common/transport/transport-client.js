@@ -3,13 +3,20 @@ const rp = require('request-promise-native');
 const debug = require('debug')('domo-sdk');
 
 class TransportClient {
-  constructor(clientId, clientSecret, host) {
+  constructor(clientId, clientSecret, host, scope) {
     if (!clientId || !clientSecret) throw new TransportClientError('Missing required API credentials');
 
     this.apiHost = `https://${host || 'api.domo.com'}`;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
     this.accessToken = '';
+    if (this.scope === undefined) {
+      this.scope = 'data user';
+    } else if (Array.isArray(scope)) {
+      this.scope = scope.join(' ');
+    } else {
+      this.scope = scope;
+    }
   }
 
   addAuthHeaders(baseHeaders) {
@@ -33,7 +40,7 @@ class TransportClient {
   }
 
   _renewAccessToken() {
-    const qs = { grant_type: 'client_credentials', scope: 'data user' };
+    const qs = { grant_type: 'client_credentials', scope: this.scope };
     return this.request('/oauth/token', 'GET', {}, qs)
       .auth(this.clientId, this.clientSecret)
       .then(res => { this.accessToken = res.access_token; });
