@@ -1,9 +1,0 @@
-coverage/
-examples/
-**/*.spec.js
-.editorconfig
-.eslintrc
-.gitignore
-.mocharc
-.npmignore
-domo.png

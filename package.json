@@ -7,11 +7,13 @@
     "dist"
   ],
   "scripts": {
-    "lint": "eslint src",
-    "test": "npm run lint && NODE_ENV=test ./node_modules/.bin/mocha --opts .mocharc",
-    "test:watch": "npm run test -- --watch",
+    "lint": "tslint src/**/*.ts --project ./tsconfig.json --type-check",
+    "test": "mocha --opts mocha.opts && rm -rf test",
+    "tdd": "mocha --opts mocha.opts --watch",
+    "build": "rm -rf ./dist && tsc",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --opts .mocharc",
-    "upload": "npm run test && npm version && npm run build && npm publish"
+    "upload": "npm run test && npm version && npm run build && npm publish",
+    "clean": "rm -rf node_modules && npm install"
   },
   "repository": {
     "type": "git",
