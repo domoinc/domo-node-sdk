@@ -1,13 +1,13 @@
-const DomoAPIClient = require('../common/domo-api');
-const HTTPMethod = require('../common/constants').HTTPMethod;
+import DomoAPIClient from '../common/DomoAPIClient';
+import { HTTP_METHODS } from '../common/constants';
 
 class DatasetClient extends DomoAPIClient {
-  constructor(transport) {
-    super(transport);
+  urlBase: string = '/v1/datasets';
+  clientDesc: string = 'Dataset';
+  pdpDesc: string = 'Personalized Data Permissions (PDP)';
 
-    this.urlBase = '/v1/datasets';
-    this.clientDesc = 'Dataset';
-    this.pdpDesc = 'Personalized Data Permissions (PDP)';
+  constructor(transport: TransportClient) {
+    super(transport);
   }
 
   create(request) {
@@ -70,4 +70,4 @@ class DatasetClient extends DomoAPIClient {
   }
 }
 
-module.exports = DatasetClient;
+export default DatasetClient;
