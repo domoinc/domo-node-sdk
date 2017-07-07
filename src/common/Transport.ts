@@ -29,15 +29,26 @@ export interface RequestOptions {
 }
 
 export default class TransportClient {
-  apiHost: string = 'api.domo.com';
+  apiHost: string;
   clientId: string;
   clientSecret: string;
   accessToken: string = '';
   scope: number[] = [API_SCOPE.USER, API_SCOPE.DATA];
 
-  constructor(clientId: string, clientSecret: string, scope?: number[], host?: string) {
+  constructor(
+    clientId: string,
+    clientSecret: string,
+    scope = [API_SCOPE.USER, API_SCOPE.DATA],
+    host = 'api.domo.com',
+  ) {
     if (!clientId || !clientSecret) {
       const msg = 'Missing required API credentials';
+      debug(msg);
+      throw new TransportClientError(msg);
+    }
+
+    if (scope && scope.length === 0) {
+      const msg = 'Must provide at least one scope';
       debug(msg);
       throw new TransportClientError(msg);
     }
@@ -74,6 +85,7 @@ export default class TransportClient {
   }
 
   private addAuthHeaders(baseHeaders) {
+    if (!this.accessToken) return baseHeaders;
     if (baseHeaders && Object.keys(baseHeaders).indexOf('Authorization') > -1) return baseHeaders;
 
     const headers = baseHeaders ? Object.assign(baseHeaders) : {};
@@ -97,19 +109,20 @@ export default class TransportClient {
     };
 
     return this.request(req)
-      .then((res) => { this.accessToken = res.access_token; });
+      .then((res) => { this.accessToken = res.access_token; })
+      .catch(console.log);
   }
 
   private request(req: Request, json = true) {
     return rp(this.formatRequest(req, json))
-      .then(res => this.validateResponse(res, req, json));
+      .catch(err => this.retryRequest(err, req, json));
   }
 
-  private validateResponse(res: any, req: Request, json: boolean) {
-    if (res.statusCode === 401) {
+  private retryRequest(err: any, req: Request, json: boolean) {
+    if (err.statusCode === 401) {
       return this.renewAccessToken().then(() => this.request(req, json));
     } else {
-      return res;
+      throw err;
     }
   }
 

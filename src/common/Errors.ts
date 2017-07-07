@@ -3,7 +3,7 @@ export class DomoAPIClientError extends Error {
   trigger: string;
   source: string;
 
-  constructor(message: string, err: string, source: string) {
+  constructor(message: string, err?: string, source?: string) {
     super(message);
     this.name = 'DomoAPIClientError';
     this.trigger = err;
