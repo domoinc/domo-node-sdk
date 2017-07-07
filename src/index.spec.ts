@@ -1,22 +1,48 @@
 import { expect } from 'chai';
-import DomoSDK from './';
-import TransportClient from './common/TransportClient';
-import DatasetClient from './DatasetClient';
-import GroupClient from './GroupClient';
-import StreamClient from './StreamClient';
-import UserClient from './UserClient';
+import Transport from '../src/common/Transport';
+import DatasetClient from '../src/datasets/DatasetClient';
+import GroupClient from '../src/groups/GroupClient';
+import StreamClient from '../src/streams/StreamClient';
+import UserClient from '../src/users/UserClient';
+import { ClientConfigException } from '../src/common/Errors';
+import { API_SCOPE } from '../src/common/Constants';
 
-describe('(Base): DomoSDK', () => {
-  it('should instantiate', done => {
-    expect(DomoSDK).to.exist;
+/* tslint:disable-next-line:import-name */
+import DomoClient from '../src';
+
+describe('(Base): DomoClient', () => {
+  it('should instantiate', (done) => {
+    expect(DomoClient).to.exist;
     done();
   });
 
-  it('should create api clients', done => {
-    const domo = new DomoSDK('client-id', 'client-secret', 'test.domo.com');
+  it('should require API credentials', (done) => {
+    try {
+      const newClient = new DomoClient(null, null);
+      expect(newClient).to.not.exist;
+    } catch (err) {
+      expect(err).to.exist;
+      expect(err).to.be.an.instanceOf(ClientConfigException);
+      done();
+    }
+  });
+
+  it('should require at least one scope', (done) => {
+    try {
+      const newClient = new DomoClient('test', 'test', []);
+      expect(newClient).to.not.exist;
+    } catch (err) {
+      expect(err).to.exist;
+      expect(err).to.be.an.instanceOf(ClientConfigException);
+      done();
+    }
+  });
+
+  it('should create api clients', (done) => {
+    const domo = new DomoClient('client-id', 'client-secret', [API_SCOPE.USER]);
 
     expect(domo.transport).to.exist;
-    expect(domo.transport).to.be.an.instanceOf(TransportClient);
+    expect(domo.transport).to.be.an.instanceOf(Transport);
 
     expect(domo.datasets).to.exist;
     expect(domo.datasets).to.be.an.instanceOf(DatasetClient);

@@ -1,7 +1,8 @@
-const DomoAPIClient = require('../common/domo-api');
-const HTTPMethod = require('../common/constants').HTTPMethod;
+import { APIClient } from '../common/APIClient';
+import Transport from '../common/Transport';
+import { HTTP_METHODS } from '../common/Constants';
 
-class StreamClient extends DomoAPIClient {
+export default class StreamClient implements APIClient {
   constructor(transport) {
     super(transport);
 
@@ -65,5 +66,3 @@ class StreamClient extends DomoAPIClient {
     return this._update(url, HTTPMethod.PUT, {}, {}, true, this.clientExecDesc);
   }
 }
-
-module.exports = StreamClient;
