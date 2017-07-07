@@ -1,21 +1,21 @@
-export class DomoAPIClientError extends Error {
-  name: string;
-  trigger: string;
-  source: string;
+export class RequestException extends Error {
+  method: string;
+  type: string;
+  source: any;
 
-  constructor(message: string, err?: string, source?: string) {
-    super(message);
-    this.name = 'DomoAPIClientError';
-    this.trigger = err;
+  constructor(method: string, type: string, source: any) {
+    super(`Unable to ${method} ${type}`);
+    this.method = method;
+    this.type = type;
     this.source = source;
   }
 }
 
-export class TransportClientError extends Error {
+export class ClientConfigException extends Error {
   name: string;
 
-  constructor(message: string) {
-    super(message);
-    this.name = 'TransportClientError';
+  constructor(missingConfig: string) {
+    super(`Missing required configuration parameter: ${missingConfig}`);
+    this.name = 'ClientConfigException';
   }
 }

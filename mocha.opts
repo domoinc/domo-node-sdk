@@ -1,4 +1,4 @@
-src/test/**/*.spec.ts
+test/**/*.spec.ts
 --require ts-node/register
 --compilers ts:ts-node/register
 --reporter list

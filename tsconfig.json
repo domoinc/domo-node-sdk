@@ -3,13 +3,12 @@
   "buildOnSave": false,
   "compilerOptions": {
     "target": "ES6",
-    "module": "CommonJS",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,
-    "rootDir": "src",
     "outDir": "dist",
     "noImplicitAny": false,
     "declaration": true

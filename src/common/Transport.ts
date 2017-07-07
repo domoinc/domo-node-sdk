@@ -1,7 +1,7 @@
 import * as rp from 'request-promise-native';
 import * as DEBUG from 'debug';
-import { TransportClientError } from './Errors';
 import { HTTP_METHODS, API_SCOPE } from './Constants';
+import { RequestException } from './Errors';
 const debug = DEBUG('domo-sdk');
 
 export interface AuthOption {
@@ -11,7 +11,7 @@ export interface AuthOption {
 
 export interface Request {
   url: string;
-  method: number;
+  method?: number;
   headers?: any;
   params?: any;
   body?: any;
@@ -28,60 +28,68 @@ export interface RequestOptions {
   json?: boolean;
 }
 
-export default class TransportClient {
+export default class Transport {
   apiHost: string;
   clientId: string;
   clientSecret: string;
   accessToken: string = '';
-  scope: number[] = [API_SCOPE.USER, API_SCOPE.DATA];
+  scopes: number[];
 
-  constructor(
-    clientId: string,
-    clientSecret: string,
-    scope = [API_SCOPE.USER, API_SCOPE.DATA],
-    host = 'api.domo.com',
-  ) {
-    if (!clientId || !clientSecret) {
-      const msg = 'Missing required API credentials';
-      debug(msg);
-      throw new TransportClientError(msg);
-    }
-
-    if (scope && scope.length === 0) {
-      const msg = 'Must provide at least one scope';
-      debug(msg);
-      throw new TransportClientError(msg);
-    }
-
+  constructor(clientId: string, clientSecret: string, scopes: number[], host: string) {
     this.apiHost = `https://${host}`;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
-    this.scope = scope;
+    this.scopes = scopes;
   }
 
-  get(req: Request) {
+  get(req: Request, type: string) {
     req.method = HTTP_METHODS.GET;
-    return this.request(req);
+    return this.request(req)
+      .catch((err) => {
+        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        debug(ex.message);
+        throw ex;
+      });
   }
 
-  post(req: Request, isJson?: boolean) {
+  post(req: Request, type: string, isJson?: boolean) {
     req.method = HTTP_METHODS.POST;
-    return this.request(req, isJson);
+    return this.request(req, isJson)
+      .catch((err) => {
+        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        debug(ex.message);
+        throw ex;
+      });
   }
 
-  put(req: Request, isJson?: boolean) {
+  put(req: Request, type: string, isJson?: boolean) {
     req.method = HTTP_METHODS.PUT;
-    return this.request(req, isJson);
+    return this.request(req, isJson)
+      .catch((err) => {
+        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        debug(ex.message);
+        throw ex;
+      });
   }
 
-  patch(req: Request, isJson?: boolean) {
+  patch(req: Request, type: string, isJson?: boolean) {
     req.method = HTTP_METHODS.PATCH;
-    return this.request(req, isJson);
+    return this.request(req, isJson)
+      .catch((err) => {
+        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        debug(ex.message);
+        throw ex;
+      });
   }
 
-  delete(req: Request) {
+  delete(req: Request, type: string) {
     req.method = HTTP_METHODS.DELETE;
-    return this.request(req);
+    return this.request(req)
+      .catch((err) => {
+        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        debug(ex.message);
+        throw ex;
+      });
   }
 
   private addAuthHeaders(baseHeaders) {
@@ -94,7 +102,7 @@ export default class TransportClient {
   }
 
   private renewAccessToken() {
-    const scope = this.scope
+    const scope = this.scopes
       .map(s => API_SCOPE[s])
       .join(' ');
 

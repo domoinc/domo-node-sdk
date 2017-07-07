@@ -1,14 +1,14 @@
 import * as sinon from 'sinon';
 import * as nock from 'nock';
 import { expect } from 'chai';
-import Transport, { Request } from '../common/Transport';
-import { HTTP_METHODS } from '../common/Constants';
+import Transport, { Request } from '../src/common/Transport';
+import { HTTP_METHODS, API_SCOPE } from '../src/common/Constants';
 
 describe('(Base): Transport', () => {
   let client;
 
   beforeEach((done) => {
-    client = new Transport('test', 'test');
+    client = new Transport('test', 'test', [API_SCOPE.USER], 'api.domo.com');
     done();
   });
 
@@ -17,17 +17,7 @@ describe('(Base): Transport', () => {
     expect(Transport).to.be.an.instanceOf(Function);
     done();
   });
-  // it('should require API credentials', (done) => {
-  //   try {
-  //     const newClient = new Transport();
-  //     expect(newClient).to.not.exist;
-  //   } catch (err) {
-  //     expect(err).to.exist;
-  //     expect(err.name).to.equal('TransportClientError');
-  //     expect(err.message).to.equal('Missing required API credentials');
-  //     done();
-  //   }
-  // });
+
   it('should have REST methods', (done) => {
     const expectedFunctions = ['get', 'post', 'put', 'patch', 'delete'];
 
@@ -62,7 +52,7 @@ describe('(Base): Transport', () => {
     nock('https://api.domo.com')
       .get('/oauth/token')
       .query({
-        scope: 'USER DATA',
+        scope: 'USER',
         grant_type: 'client_credentials',
       })
       .reply(200, { access_token: 'test' });
@@ -88,7 +78,7 @@ describe('(Base): Transport', () => {
         expect(args.url).to.equal('/oauth/token');
         expect(args.method).to.equal(HTTP_METHODS.GET);
         expect(args.params).to.have.property('grant_type', 'client_credentials');
-        expect(args.params).to.have.property('scope', 'USER DATA');
+        expect(args.params).to.have.property('scope', 'USER');
         done();
       });
   });
