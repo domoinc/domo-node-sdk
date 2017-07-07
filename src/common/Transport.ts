@@ -46,7 +46,7 @@ export default class Transport {
     req.method = HTTP_METHODS.GET;
     return this.request(req)
       .catch((err) => {
-        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        const ex = new RequestException(HTTP_METHODS[req.method], req, type, err);
         debug(ex.message);
         throw ex;
       });
@@ -56,7 +56,7 @@ export default class Transport {
     req.method = HTTP_METHODS.POST;
     return this.request(req, isJson)
       .catch((err) => {
-        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        const ex = new RequestException(HTTP_METHODS[req.method], req, type, err);
         debug(ex.message);
         throw ex;
       });
@@ -66,7 +66,7 @@ export default class Transport {
     req.method = HTTP_METHODS.PUT;
     return this.request(req, isJson)
       .catch((err) => {
-        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        const ex = new RequestException(HTTP_METHODS[req.method], req, type, err);
         debug(ex.message);
         throw ex;
       });
@@ -76,7 +76,7 @@ export default class Transport {
     req.method = HTTP_METHODS.PATCH;
     return this.request(req, isJson)
       .catch((err) => {
-        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        const ex = new RequestException(HTTP_METHODS[req.method], req, type, err);
         debug(ex.message);
         throw ex;
       });
@@ -86,7 +86,7 @@ export default class Transport {
     req.method = HTTP_METHODS.DELETE;
     return this.request(req)
       .catch((err) => {
-        const ex = new RequestException(HTTP_METHODS[req.method], type, err);
+        const ex = new RequestException(HTTP_METHODS[req.method], req, type, err);
         debug(ex.message);
         throw ex;
       });
