@@ -42,7 +42,7 @@ describe('(Base): TransportClient', () => {
     done();
   });
 
-  it('REST methods should call single request', done => {
+  it('REST methods should call single request', (done) => {
     const spy = sinon.stub(client, 'request').returns(Promise.resolve());
     const expectedFunctions = ['get', 'post', 'put', 'patch', 'delete'];
     const promises = expectedFunctions.map(fn => client[fn]({}));
@@ -54,7 +54,7 @@ describe('(Base): TransportClient', () => {
     });
   });
 
-  it('should check for expired tokens', done => {
+  it('should check for expired tokens', (done) => {
     nock('https://api.domo.com').get('/v1/users').reply(200, { statusCode: 200 });
     const spy = sinon.spy(client, '_tokenExpired');
     client.validateAccessToken().then(() => {
@@ -63,7 +63,7 @@ describe('(Base): TransportClient', () => {
     });
   });
 
-  it('should auto-renew expired tokens', done => {
+  it('should auto-renew expired tokens', (done) => {
     nock('https://api.domo.com')
       .get('/v1/users')
       .reply(400);
