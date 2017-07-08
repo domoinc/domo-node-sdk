@@ -43,8 +43,7 @@ describe('(Client): Stream', () => {
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args).to.include(client.type);
-      expect(spy.firstCall.args[0]).to.have.all.keys('url', 'body');
-      expect(spy.firstCall.args[0].url).to.equal(client.urlBase);
+      expect(spy.firstCall.args[0]).to.have.property('url', client.urlBase);
       expect(spy.firstCall.args[0].body).to.equal(request);
       done();
     });
@@ -60,8 +59,7 @@ describe('(Client): Stream', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0]).to.have.all.keys('url', 'params');
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1`);
       expect(spy.firstCall.args[0].params).to.have.property('fields', 'id,dataset');
       expect(spy.firstCall.args).to.include(client.type);
       done();
@@ -79,7 +77,7 @@ describe('(Client): Stream', () => {
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args).to.include(client.type);
-      expect(spy.firstCall.args[0].url).to.equal(client.urlBase);
+      expect(spy.firstCall.args[0]).to.have.property('url', client.urlBase);
       expect(spy.firstCall.args[0].params).to.have.property('fields', 'all');
       done();
     });
@@ -98,7 +96,7 @@ describe('(Client): Stream', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1`);
       expect(spy.firstCall.args[0].body).to.have.property('updateMethod', updateMethod);
       expect(spy.firstCall.args).to.include(client.type);
       done();
@@ -115,7 +113,7 @@ describe('(Client): Stream', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1`);
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
     });
@@ -132,8 +130,7 @@ describe('(Client): Stream', () => {
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args).to.include(client.type);
-      expect(spy.firstCall.args[0]).to.have.all.keys('url', 'params');
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/search`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/search`);
       expect(spy.firstCall.args[0].params).to.have.property('q', 'dataSource.name:test');
       expect(spy.firstCall.args[0].params).to.have.property('fields', 'all');
       done();
@@ -151,7 +148,7 @@ describe('(Client): Stream', () => {
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions`);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/executions`);
         expect(spy.firstCall.args[1]).to.equal(client.execType);
         done();
       });
@@ -167,7 +164,7 @@ describe('(Client): Stream', () => {
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions/2`);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/executions/2`);
         expect(spy.firstCall.args[1]).to.equal(client.execType);
         done();
       });
@@ -184,7 +181,7 @@ describe('(Client): Stream', () => {
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
         expect(spy.firstCall.args).to.include(client.execType);
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions`);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/executions`);
         expect(spy.firstCall.args[0].params).to.have.property('limit', 5);
         expect(spy.firstCall.args[0].params).to.have.property('offset', 0);
         done();
@@ -201,9 +198,10 @@ describe('(Client): Stream', () => {
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
+        const expectedUrl = `${client.urlBase}/1/executions/2/part/3`;
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions/2/part/3`);
-        expect(spy.firstCall.args[0].body).to.equal(csv);
+        expect(spy.firstCall.args[0]).to.have.property('url', expectedUrl);
+        expect(spy.firstCall.args[0]).to.have.property('body', csv);
         expect(spy.firstCall.args[0].headers).to.have.property('Content-Type', 'text/csv');
         expect(spy.firstCall.args).to.include(client.execType);
         done();
@@ -220,9 +218,10 @@ describe('(Client): Stream', () => {
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
+        const expectedUrl = `${client.urlBase}/1/executions/2/part/3`;
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions/2/part/3`);
-        expect(spy.firstCall.args[0].body).to.equal(gzip);
+        expect(spy.firstCall.args[0]).to.have.property('url', expectedUrl);
+        expect(spy.firstCall.args[0]).to.have.property('body', gzip);
         expect(spy.firstCall.args[0].headers).to.have.property('Content-Type', 'application/gzip');
         expect(spy.firstCall.args).to.include(client.execType);
         done();
@@ -238,8 +237,9 @@ describe('(Client): Stream', () => {
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
+        const expectedUrl = `${client.urlBase}/1/executions/2/commit`;
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions/2/commit`);
+        expect(spy.firstCall.args[0]).to.have.property('url', expectedUrl);
         expect(spy.firstCall.args).to.include(client.execType);
         done();
       });
@@ -254,8 +254,9 @@ describe('(Client): Stream', () => {
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
+        const expectedUrl =  `${client.urlBase}/1/executions/2/abort`;
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions/2/abort`);
+        expect(spy.firstCall.args[0]).to.have.property('url', expectedUrl);
         expect(spy.firstCall.args).to.include(client.execType);
         done();
       });
@@ -270,8 +271,9 @@ describe('(Client): Stream', () => {
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
+        const expectedUrl = `${client.urlBase}/1/executions/abort`;
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/executions/abort`);
+        expect(spy.firstCall.args[0]).to.have.property('url', expectedUrl);
         expect(spy.firstCall.args).to.include(client.execType);
         done();
       });

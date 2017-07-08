@@ -13,8 +13,17 @@ export interface DataSet {
   schema: Schema;
 }
 
-export interface CreateDatasetRequest extends DataSet {}
-export interface UpdateDatasetRequest extends DataSet {}
+export interface CreateDatasetRequest {
+  name: string;
+  description?: string;
+  schema: Schema;
+}
+
+export interface UpdateDatasetRequest {
+  name?: string;
+  description?: string;
+  schema?: Schema;
+}
 
 export interface ListDatasetRequest {
   sort: string;
@@ -26,6 +35,7 @@ export interface PolicyFilter {
   column: string;
   not: boolean;
   operator: string;
+  values: string[];
 }
 
 export interface CreatePolicyRequest {
@@ -36,4 +46,10 @@ export interface CreatePolicyRequest {
   filters: PolicyFilter[];
 }
 
-export interface UpdatePolicyRequest extends CreatePolicyRequest {}
+export interface UpdatePolicyRequest {
+  name?: string;
+  type?: string;
+  users?: number[];
+  groups?: number[];
+  filters?: PolicyFilter[];
+}

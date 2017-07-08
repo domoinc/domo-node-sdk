@@ -1,9 +1,16 @@
 import * as sinon from 'sinon';
 import { expect } from 'chai';
 
-import DatasetClient from '../src/datasets/DatasetClient';
 import Transport from '../src/common/Transport';
-import { HTTP_METHODS, API_SCOPE } from '../src/common/Constants';
+import { HTTP_METHODS, API_SCOPE, FILTER_OPERATORS } from '../src/common/Constants';
+import DatasetClient from '../src/datasets/DatasetClient';
+import {
+  CreateDatasetRequest,
+  UpdateDatasetRequest,
+  ListDatasetRequest,
+  CreatePolicyRequest,
+  UpdatePolicyRequest,
+} from '../src/datasets/models';
 
 describe('(Client): Dataset', () => {
   let client;
@@ -28,13 +35,19 @@ describe('(Client): Dataset', () => {
     expect(client.create).to.exist;
     expect(client.create).to.an.instanceOf(Function);
 
-    const promise = client.create({});
+    const dataset: CreateDatasetRequest = {
+      name: 'test',
+      description: 'created by test',
+      schema: { columns: [{ name: 'col1', type: 'STRING' }] },
+    };
+
+    const promise = client.create(dataset);
     expect(promise).to.be.an.instanceOf(Promise);
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0]).to.have.property('url', client.urlBase);
-      expect(spy.firstCall.args[0]).to.have.property('body');
+      expect(spy.firstCall.args[0]).to.have.property('body', dataset);
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
     });
@@ -50,7 +63,7 @@ describe('(Client): Dataset', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1`);
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
     });
@@ -61,16 +74,19 @@ describe('(Client): Dataset', () => {
     expect(client.list).to.exist;
     expect(client.list).to.an.instanceOf(Function);
 
-    const promise = client.list({ sort: 'sort', limit: 1, offset: 0 });
+    const request: ListDatasetRequest = {
+      sort: 'name',
+      limit: 1,
+      offset: 0,
+    };
+
+    const promise = client.list(request);
     expect(promise).to.be.an.instanceOf(Promise);
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0]).to.have.property('url', client.urlBase);
-      expect(spy.firstCall.args[0]).to.have.property('params');
-      expect(spy.firstCall.args[0].params).to.have.property('sort', 'sort');
-      expect(spy.firstCall.args[0].params).to.have.property('limit', 1);
-      expect(spy.firstCall.args[0].params).to.have.property('offset', 0);
+      expect(spy.firstCall.args[0]).to.have.property('params', request);
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
     });
@@ -81,14 +97,14 @@ describe('(Client): Dataset', () => {
     expect(client.update).to.exist;
     expect(client.update).to.an.instanceOf(Function);
 
-    const dataset = {};
+    const dataset: UpdateDatasetRequest = { name: 'test-update' };
     const promise = client.update(1, dataset);
     expect(promise).to.be.an.instanceOf(Promise);
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1`);
-      expect(spy.firstCall.args[0].body).to.equal(dataset);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1`);
+      expect(spy.firstCall.args[0]).to.have.property('body', dataset);
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
     });
@@ -104,7 +120,7 @@ describe('(Client): Dataset', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1`);
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
     });
@@ -121,8 +137,8 @@ describe('(Client): Dataset', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/data`);
-      expect(spy.firstCall.args[0].body).to.equal(csv);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/data`);
+      expect(spy.firstCall.args[0]).to.have.property('body', csv);
       expect(spy.firstCall.args[0].headers).to.have.property('Content-Type', 'text/csv');
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
@@ -139,8 +155,7 @@ describe('(Client): Dataset', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0]).to.have.all.keys('url', 'params', 'headers');
-      expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/data`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/data`);
       expect(spy.firstCall.args[0].params).to.have.property('includeHeader', false);
       expect(spy.firstCall.args[0].params).to.have.property('fileName');
       expect(spy.firstCall.args[0].headers).to.have.property('Accept', 'text/csv');
@@ -155,15 +170,26 @@ describe('(Client): Dataset', () => {
       expect(client.createPDP).to.exist;
       expect(client.createPDP).to.an.instanceOf(Function);
 
-      const pdp = {};
+      const pdp: CreatePolicyRequest = {
+        name: 'test-policy',
+        type: 'user',
+        users: [1],
+        groups: [],
+        filters: [{
+          column: 'col1',
+          values: ['hello'],
+          not: true,
+          operator: FILTER_OPERATORS[FILTER_OPERATORS.EQUALS],
+        }],
+      };
+
       const promise = client.createPDP(1, pdp);
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.all.keys('url', 'body');
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/policies`);
-        expect(spy.firstCall.args[0].body).to.equal(pdp);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies`);
+        expect(spy.firstCall.args[0]).to.have.property('body', pdp);
         expect(spy.firstCall.args).to.include(client.pdpType);
         done();
       });
@@ -179,8 +205,7 @@ describe('(Client): Dataset', () => {
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.all.keys('url');
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/policies/2`);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies/2`);
         expect(spy.firstCall.args).to.include(client.pdpType);
         done();
       });
@@ -196,8 +221,7 @@ describe('(Client): Dataset', () => {
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.all.keys('url');
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/policies`);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies`);
         expect(spy.firstCall.args).to.include(client.pdpType);
         done();
       });
@@ -208,14 +232,14 @@ describe('(Client): Dataset', () => {
       expect(client.updatePDP).to.exist;
       expect(client.updatePDP).to.an.instanceOf(Function);
 
-      const pdp = { name: 'test' };
+      const pdp: UpdatePolicyRequest = { name: 'test' };
       const promise = client.updatePDP(1, 2, pdp);
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.all.keys('url', 'body');
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/policies/2`);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies/2`);
+        expect(spy.firstCall.args[0]).to.have.property('body', pdp);
         expect(spy.firstCall.args).to.include(client.pdpType);
         done();
       });
@@ -231,8 +255,7 @@ describe('(Client): Dataset', () => {
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.all.keys('url');
-        expect(spy.firstCall.args[0].url).to.equal(`${client.urlBase}/1/policies/2`);
+        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies/2`);
         expect(spy.firstCall.args[1]).to.equal(client.pdpType);
         done();
       });

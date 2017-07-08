@@ -9,9 +9,9 @@ export interface ListGroupRequest {
 }
 
 export interface UpdateGroupRequest {
-  name: string;
-  default: boolean;
-  active: boolean;
+  name?: string;
+  default?: boolean;
+  active?: boolean;
 }
 
 export interface ListGroupUsersRequest extends ListGroupRequest {}
