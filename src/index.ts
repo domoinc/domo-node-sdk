@@ -10,7 +10,7 @@ import { ClientConfigException } from './common/Errors';
 
 const debug = DEBUG('domo-sdk');
 
-class DomoClient {
+export default class DomoClient {
   transport: Transport;
   datasets: DatasetClient;
   streams: StreamClient;
@@ -42,5 +42,3 @@ class DomoClient {
     this.groups = new GroupClient(this.transport);
   }
 }
-
-export default DomoClient;

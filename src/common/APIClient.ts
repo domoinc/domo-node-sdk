@@ -5,9 +5,9 @@ export interface APIClient {
   urlBase: string;
   transport: Transport;
 
-  create(create: any);
+  create(request: any);
   get(id: string);
   list(params?: any);
-  update(id: string, update: any);
+  update(id: string, request: any);
   delete(id: string);
 }

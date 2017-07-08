@@ -7,13 +7,14 @@ export interface Schema {
   columns: Column[];
 }
 
-export interface CreateDatasetRequest {
+export interface DataSet {
   name: string;
   description: string;
   schema: Schema;
 }
 
-export interface UpdateDatasetRequest extends CreateDatasetRequest {}
+export interface CreateDatasetRequest extends DataSet {}
+export interface UpdateDatasetRequest extends DataSet {}
 
 export interface ListDatasetRequest {
   sort: string;

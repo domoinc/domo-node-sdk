@@ -3,14 +3,14 @@ import { Request } from './Transport';
 export class RequestException extends Error {
   method: string;
   type: string;
-  source: string;
+  path: string;
   error: any;
 
   constructor(method: string, req: Request, type: string, error: any) {
-    super(`Unable to ${method} ${type}`);
+    super(`Unable to ${method} ${req.url} for ${type}`);
     this.method = method;
     this.type = type;
-    this.source = req.url;
+    this.path = req.url;
     this.error = error;
   }
 }
