@@ -2,6 +2,7 @@ import * as DEBUG from 'debug';
 
 import Transport from './common/Transport';
 import DatasetClient from './datasets/DatasetClient';
+import PDPClient from './datasets/PDPClient';
 import StreamClient from './streams/StreamClient';
 import UserClient from './users/UserClient';
 import GroupClient from './groups/GroupClient';
@@ -13,16 +14,12 @@ const debug = DEBUG('domo-sdk');
 export default class DomoClient {
   transport: Transport;
   datasets: DatasetClient;
+  policies: PDPClient;
   streams: StreamClient;
   users: UserClient;
   groups: GroupClient;
 
-  constructor(
-    clientId: string,
-    clientSecret: string,
-    scope = [API_SCOPE.USER, API_SCOPE.DATA],
-    host = 'api.domo.com',
-  ) {
+  constructor(clientId: string, clientSecret: string, scope = [API_SCOPE.USER, API_SCOPE.DATA], host = 'api.domo.com') {
     if (!clientId || !clientSecret) {
       const err = new ClientConfigException('clientId, clientSecret');
       debug(err.message);
@@ -37,6 +34,7 @@ export default class DomoClient {
 
     this.transport = new Transport(clientId, clientSecret, scope, host);
     this.datasets = new DatasetClient(this.transport);
+    this.policies = new PDPClient(this.transport);
     this.streams = new StreamClient(this.transport);
     this.users = new UserClient(this.transport);
     this.groups = new GroupClient(this.transport);
