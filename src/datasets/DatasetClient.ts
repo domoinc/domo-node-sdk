@@ -1,63 +1,54 @@
-import { APIClient } from '../common/APIClient';
 import Transport, { Request } from '../common/Transport';
 import { HTTP_METHODS } from '../common/Constants';
-import {
-  CreateDatasetRequest,
-  UpdateDatasetRequest,
-  ListDatasetRequest,
-  CreatePolicyRequest,
-  UpdatePolicyRequest,
-} from './models';
+import { DataSet, Policy } from './models';
 
-export default class DatasetClient implements APIClient {
-  urlBase: string;
+export default class DatasetClient {
+  urlBase: string = '/v1/datasets';
   type: string = 'Dataset';
-  pdpType: string = 'Personalized Data Permission (PDP)';
   transport: Transport;
 
   constructor(transport: Transport) {
-    this.urlBase = '/v1/datasets';
     this.transport = transport;
   }
 
-  create(create: CreateDatasetRequest) {
+  create(dataset: DataSet): Promise<DataSet> {
     const req: Request = {
       url: this.urlBase,
-      body: create,
+      body: dataset,
     };
 
     return this.transport.post(req, this.type);
   }
 
-  get(id: string) {
+  get(id: string): Promise<DataSet> {
     const req: Request = { url: `${this.urlBase}/${id}` };
     return this.transport.get(req, this.type);
   }
 
-  list(params: ListDatasetRequest) {
+  list(limit: number, offset: number, sort: string): Promise<DataSet[]> {
     const req: Request = {
-      params,
       url: this.urlBase,
+      params: { limit, offset, sort },
     };
 
     return this.transport.get(req, this.type);
   }
 
-  update(id: string, update: UpdateDatasetRequest) {
+  update(id: string, dataset: DataSet): Promise<DataSet> {
     const req: Request = {
       url: `${this.urlBase}/${id}`,
-      body: update,
+      body: dataset,
     };
 
     return this.transport.put(req, this.type);
   }
 
-  delete(id: string) {
+  delete(id: string): Promise<void> {
     const req: Request = { url: `${this.urlBase}/${id}` };
     return this.transport.delete(req, this.type);
   }
 
-  importData(id: string, csv: string) {
+  importData(id: string, csv: string): Promise<void> {
     const req: Request = {
       url: `${this.urlBase}/${id}/data`,
       headers: { 'Content-Type': 'text/csv' },
@@ -67,7 +58,7 @@ export default class DatasetClient implements APIClient {
     return this.transport.put(req, this.type, false);
   }
 
-  exportData(id: string, includeHeader = false) {
+  exportData(id: string, includeHeader = false): Promise<string> {
     const req: Request = {
       url: `${this.urlBase}/${id}/data`,
       headers: { Accept: 'text/csv' },
@@ -78,41 +69,5 @@ export default class DatasetClient implements APIClient {
     };
 
     return this.transport.get(req, this.type);
-  }
-
-  createPDP(datasetId: string, policy: CreatePolicyRequest) {
-    const req: Request = {
-      url: `${this.urlBase}/${datasetId}/policies`,
-      body: policy,
-    };
-
-    return this.transport.post(req, this.pdpType);
-  }
-
-  getPDP(datasetId: string, policyId: number) {
-    const req: Request = { url: `${this.urlBase}/${datasetId}/policies/${policyId}` };
-
-    return this.transport.get(req, this.pdpType);
-  }
-
-  listPDP(datasetId: string) {
-    const req: Request = { url: `${this.urlBase}/${datasetId}/policies` };
-
-    return this.transport.get(req, this.pdpType);
-  }
-
-  updatePDP(datasetId: string, policyId: number, policy: UpdatePolicyRequest) {
-    const req: Request = {
-      url: `${this.urlBase}/${datasetId}/policies/${policyId}`,
-      body: policy,
-    };
-
-    return this.transport.put(req, this.pdpType);
-  }
-
-  deletePDP(datasetId, policyId) {
-    const req: Request = { url: `${this.urlBase}/${datasetId}/policies/${policyId}` };
-
-    return this.transport.delete(req, this.pdpType);
   }
 }

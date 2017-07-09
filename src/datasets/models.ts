@@ -8,27 +8,17 @@ export interface Schema {
 }
 
 export interface DataSet {
-  name: string;
-  description: string;
-  schema: Schema;
-}
-
-export interface CreateDatasetRequest {
-  name: string;
-  description?: string;
-  schema: Schema;
-}
-
-export interface UpdateDatasetRequest {
   name?: string;
-  description?: string;
   schema?: Schema;
+  description?: string;
 }
 
-export interface ListDatasetRequest {
-  sort: string;
-  limit: number;
-  offset: number;
+export interface Policy {
+  name?: string;
+  type?: string;
+  users?: number[];
+  groups?: number[];
+  filters?: PolicyFilter[];
 }
 
 export interface PolicyFilter {
@@ -36,20 +26,4 @@ export interface PolicyFilter {
   not: boolean;
   operator: string;
   values: string[];
-}
-
-export interface CreatePolicyRequest {
-  name: string;
-  type: string;
-  users: number[];
-  groups: number[];
-  filters: PolicyFilter[];
-}
-
-export interface UpdatePolicyRequest {
-  name?: string;
-  type?: string;
-  users?: number[];
-  groups?: number[];
-  filters?: PolicyFilter[];
 }
