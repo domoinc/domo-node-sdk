@@ -41,7 +41,8 @@
 * View the [changelog](CHANGELOG.md)
 
 ### Usage
-* See `/examples` for full usage
+* For basic usage see [/examples](https://github.com/domoinc/domo-node-sdk/tree/master/examples)
+* For full TypeScript usage refer to [/test](https://github.com/domoinc/domo-node-sdk/tree/master/test).
 * Create an API Client on the [Domo Developer Portal](https://developer.domo.com/)
 * Use your API Client id/secret to instantiate an SDK instance
 * Multiple API Clients can be used by instantiating multiple SDK clients
