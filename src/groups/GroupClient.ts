@@ -1,14 +1,8 @@
-import { APIClient } from '../common/APIClient';
 import Transport, { Request } from '../common/Transport';
 import { HTTP_METHODS } from '../common/Constants';
-import {
-  CreateGroupRequest,
-  ListGroupRequest,
-  UpdateGroupRequest,
-  ListGroupUsersRequest,
- } from './models';
+import { Group } from './models';
 
-export default class GroupClient implements APIClient {
+export default class GroupClient {
   urlBase: string = '/v1/groups';
   type: string = 'Group';
   transport: Transport;
@@ -17,7 +11,7 @@ export default class GroupClient implements APIClient {
     this.transport = transport;
   }
 
-  create(group: CreateGroupRequest) {
+  create(group: Group): Promise<Group> {
     const req: Request = {
       url: this.urlBase,
       body: group,
@@ -26,49 +20,49 @@ export default class GroupClient implements APIClient {
     return this.transport.post(req, this.type);
   }
 
-  get(id: string) {
+  get(id: string): Promise<Group> {
     const req: Request = { url: `${this.urlBase}/${id}` };
     return this.transport.get(req, this.type);
   }
 
-  list(params: ListGroupRequest) {
+  list(limit: number, offset: number): Promise<Group[]> {
     const req: Request = {
-      params,
       url: this.urlBase,
+      params: { limit, offset },
     };
 
     return this.transport.get(req, this.type);
   }
 
-  update(id: string, update: UpdateGroupRequest) {
+  update(id: string, group: Group): Promise<Group> {
     const req: Request = {
       url: `${this.urlBase}/${id}`,
-      body: update,
+      body: group,
     };
 
     return this.transport.put(req, this.type);
   }
 
-  delete(id: string) {
+  delete(id: string): Promise<void> {
     const req: Request = { url: `${this.urlBase}/${id}` };
     return this.transport.delete(req, this.type);
   }
 
-  addUser(groupId: string, userId: number) {
+  addUser(groupId: string, userId: number): Promise<void> {
     const req: Request = { url: `${this.urlBase}/${groupId}/users/${userId}` };
     return this.transport.put(req, this.type);
   }
 
-  listUsers(groupId: string, params: ListGroupUsersRequest) {
+  listUsers(groupId: string, limit: number, offset: number): Promise<number[]> {
     const req: Request = {
-      params,
       url: `${this.urlBase}/${groupId}/users`,
+      params: { limit, offset },
     };
 
     return this.transport.get(req, this.type);
   }
 
-  removeUser(groupId: string, userId: number) {
+  removeUser(groupId: string, userId: number): Promise<void> {
     const req: Request = { url: `${this.urlBase}/${groupId}/users/${userId}` };
     return this.transport.delete(req, this.type);
   }

@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import StreamClient from '../src/streams/StreamClient';
 import Transport from '../src/common/Transport';
 import { HTTP_METHODS, API_SCOPE, UPDATE_METHODS } from '../src/common/Constants';
-import { CreateStreamRequest, UpdateStreamRequest } from '../src/streams/models';
+import { Stream, StreamExecution } from '../src/streams/models';
 
 describe('(Client): Stream', () => {
   let client;
@@ -28,7 +28,7 @@ describe('(Client): Stream', () => {
     expect(client.create).to.exist;
     expect(client.create).to.an.instanceOf(Function);
 
-    const request: CreateStreamRequest = {
+    const stream: Stream = {
       dataSet: {
         name: 'test-ds',
         description: 'test-description',
@@ -37,14 +37,14 @@ describe('(Client): Stream', () => {
       updateMethod: UPDATE_METHODS[UPDATE_METHODS.UPDATE],
     };
 
-    const promise = client.create(request);
+    const promise = client.create(stream);
     expect(promise).to.be.an.instanceOf(Promise);
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args).to.include(client.type);
       expect(spy.firstCall.args[0]).to.have.property('url', client.urlBase);
-      expect(spy.firstCall.args[0].body).to.equal(request);
+      expect(spy.firstCall.args[0]).to.have.property('body', stream);
       done();
     });
   });
@@ -89,15 +89,15 @@ describe('(Client): Stream', () => {
     expect(client.update).to.an.instanceOf(Function);
 
     const updateMethod = UPDATE_METHODS[UPDATE_METHODS.REPLACE];
-    const update: UpdateStreamRequest = { updateMethod };
+    const stream: Stream = { updateMethod };
 
-    const promise = client.update(1, update);
+    const promise = client.update(1, stream);
     expect(promise).to.be.an.instanceOf(Promise);
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1`);
-      expect(spy.firstCall.args[0].body).to.have.property('updateMethod', updateMethod);
+      expect(spy.firstCall.args[0]).to.have.property('body', stream);
       expect(spy.firstCall.args).to.include(client.type);
       done();
     });

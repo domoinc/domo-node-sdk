@@ -16,3 +16,5 @@ export enum FILTER_OPERATORS {
   ENDS_WITH,
   CONTAINS,
 }
+
+export enum ROLES { Admin, Privileged, Participant }

@@ -4,13 +4,7 @@ import { expect } from 'chai';
 import Transport from '../src/common/Transport';
 import { HTTP_METHODS, API_SCOPE, FILTER_OPERATORS } from '../src/common/Constants';
 import DatasetClient from '../src/datasets/DatasetClient';
-import {
-  CreateDatasetRequest,
-  UpdateDatasetRequest,
-  ListDatasetRequest,
-  CreatePolicyRequest,
-  UpdatePolicyRequest,
-} from '../src/datasets/models';
+import { DataSet, Policy } from '../src/datasets/models';
 
 describe('(Client): Dataset', () => {
   let client;
@@ -35,7 +29,7 @@ describe('(Client): Dataset', () => {
     expect(client.create).to.exist;
     expect(client.create).to.an.instanceOf(Function);
 
-    const dataset: CreateDatasetRequest = {
+    const dataset: DataSet = {
       name: 'test',
       description: 'created by test',
       schema: { columns: [{ name: 'col1', type: 'STRING' }] },
@@ -74,19 +68,18 @@ describe('(Client): Dataset', () => {
     expect(client.list).to.exist;
     expect(client.list).to.an.instanceOf(Function);
 
-    const request: ListDatasetRequest = {
-      sort: 'name',
-      limit: 1,
-      offset: 0,
-    };
-
-    const promise = client.list(request);
+    const limit = 1;
+    const offset = 0;
+    const sort = 'name';
+    const promise = client.list(limit, offset, sort);
     expect(promise).to.be.an.instanceOf(Promise);
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args[0]).to.have.property('url', client.urlBase);
-      expect(spy.firstCall.args[0]).to.have.property('params', request);
+      expect(spy.firstCall.args[0].params).to.have.property('limit', limit);
+      expect(spy.firstCall.args[0].params).to.have.property('offset', offset);
+      expect(spy.firstCall.args[0].params).to.have.property('sort', sort);
       expect(spy.firstCall.args[1]).to.equal(client.type);
       done();
     });
@@ -97,7 +90,7 @@ describe('(Client): Dataset', () => {
     expect(client.update).to.exist;
     expect(client.update).to.an.instanceOf(Function);
 
-    const dataset: UpdateDatasetRequest = { name: 'test-update' };
+    const dataset: DataSet = { name: 'test-update' };
     const promise = client.update(1, dataset);
     expect(promise).to.be.an.instanceOf(Promise);
 
@@ -161,104 +154,6 @@ describe('(Client): Dataset', () => {
       expect(spy.firstCall.args[0].headers).to.have.property('Accept', 'text/csv');
       expect(spy.firstCall.args).to.include(client.type);
       done();
-    });
-  });
-
-  describe('PDP:', () => {
-    it('should create', (done) => {
-      const spy = sinon.stub(client.transport, 'post').returns(Promise.resolve());
-      expect(client.createPDP).to.exist;
-      expect(client.createPDP).to.an.instanceOf(Function);
-
-      const pdp: CreatePolicyRequest = {
-        name: 'test-policy',
-        type: 'user',
-        users: [1],
-        groups: [],
-        filters: [{
-          column: 'col1',
-          values: ['hello'],
-          not: true,
-          operator: FILTER_OPERATORS[FILTER_OPERATORS.EQUALS],
-        }],
-      };
-
-      const promise = client.createPDP(1, pdp);
-      expect(promise).to.be.an.instanceOf(Promise);
-
-      promise.then(() => {
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies`);
-        expect(spy.firstCall.args[0]).to.have.property('body', pdp);
-        expect(spy.firstCall.args).to.include(client.pdpType);
-        done();
-      });
-    });
-
-    it('should get', (done) => {
-      const spy = sinon.stub(client.transport, 'get').returns(Promise.resolve());
-      expect(client.getPDP).to.exist;
-      expect(client.getPDP).to.an.instanceOf(Function);
-
-      const promise = client.getPDP(1, 2);
-      expect(promise).to.be.an.instanceOf(Promise);
-
-      promise.then(() => {
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies/2`);
-        expect(spy.firstCall.args).to.include(client.pdpType);
-        done();
-      });
-    });
-
-    it('should list', (done) => {
-      const spy = sinon.stub(client.transport, 'get').returns(Promise.resolve());
-      expect(client.listPDP).to.exist;
-      expect(client.listPDP).to.an.instanceOf(Function);
-
-      const promise = client.listPDP(1);
-      expect(promise).to.be.an.instanceOf(Promise);
-
-      promise.then(() => {
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies`);
-        expect(spy.firstCall.args).to.include(client.pdpType);
-        done();
-      });
-    });
-
-    it('should update', (done) => {
-      const spy = sinon.stub(client.transport, 'put').returns(Promise.resolve());
-      expect(client.updatePDP).to.exist;
-      expect(client.updatePDP).to.an.instanceOf(Function);
-
-      const pdp: UpdatePolicyRequest = { name: 'test' };
-      const promise = client.updatePDP(1, 2, pdp);
-      expect(promise).to.be.an.instanceOf(Promise);
-
-      promise.then(() => {
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies/2`);
-        expect(spy.firstCall.args[0]).to.have.property('body', pdp);
-        expect(spy.firstCall.args).to.include(client.pdpType);
-        done();
-      });
-    });
-
-    it('should delete', (done) => {
-      const spy = sinon.stub(client.transport, 'delete').returns(Promise.resolve());
-      expect(client.deletePDP).to.exist;
-      expect(client.deletePDP).to.an.instanceOf(Function);
-
-      const promise = client.deletePDP(1, 2);
-      expect(promise).to.be.an.instanceOf(Promise);
-
-      promise.then(() => {
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/policies/2`);
-        expect(spy.firstCall.args[1]).to.equal(client.pdpType);
-        done();
-      });
     });
   });
 });

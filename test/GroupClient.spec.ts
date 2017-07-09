@@ -4,12 +4,7 @@ import { expect } from 'chai';
 import GroupClient from '../src/groups/GroupClient';
 import Transport from '../src/common/Transport';
 import { HTTP_METHODS, API_SCOPE } from '../src/common/Constants';
-import {
-  CreateGroupRequest,
-  UpdateGroupRequest,
-  ListGroupRequest,
-  ListGroupUsersRequest,
-} from '../src/groups/models';
+import { Group } from '../src/groups/models';
 
 describe('(Client): Group', () => {
   let client;
@@ -33,7 +28,7 @@ describe('(Client): Group', () => {
     expect(client.create).to.exist;
     expect(client.create).to.an.instanceOf(Function);
 
-    const group: CreateGroupRequest = {
+    const group: Group = {
       name: 'group1',
       default: false,
     };
@@ -71,19 +66,17 @@ describe('(Client): Group', () => {
     expect(client.list).to.exist;
     expect(client.list).to.an.instanceOf(Function);
 
-    const request: ListGroupRequest = {
-      limit: 5,
-      offset: 0,
-    };
-
-    const promise = client.list(request);
+    const limit = 5;
+    const offset = 0;
+    const promise = client.list(limit, offset);
     expect(promise).to.be.an.instanceOf(Promise);
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
       expect(spy.firstCall.args).to.include(client.type);
       expect(spy.firstCall.args[0]).to.have.property('url', client.urlBase);
-      expect(spy.firstCall.args[0]).to.have.property('params', request);
+      expect(spy.firstCall.args[0].params).to.have.property('limit', limit);
+      expect(spy.firstCall.args[0].params).to.have.property('offset', offset);
       done();
     });
   });
@@ -93,7 +86,7 @@ describe('(Client): Group', () => {
     expect(client.update).to.exist;
     expect(client.update).to.an.instanceOf(Function);
 
-    const group: UpdateGroupRequest = { name: 'new-name', active: false };
+    const group: Group = { name: 'new-name', active: false };
     const promise = client.update(1, group);
     expect(promise).to.be.an.instanceOf(Promise);
 
@@ -144,14 +137,16 @@ describe('(Client): Group', () => {
       expect(client.listUsers).to.exist;
       expect(client.listUsers).to.an.instanceOf(Function);
 
-      const request: ListGroupUsersRequest = { limit: 5, offset: 0 };
-      const promise = client.listUsers(1, request);
+      const limit = 5;
+      const offset = 0;
+      const promise = client.listUsers(1, limit, offset);
       expect(promise).to.be.an.instanceOf(Promise);
 
       promise.then(() => {
         expect(spy.calledOnce).to.be.true;
         expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/users`);
-        expect(spy.firstCall.args[0]).to.have.property('params', request);
+        expect(spy.firstCall.args[0].params).to.have.property('limit', limit);
+        expect(spy.firstCall.args[0].params).to.have.property('offset', offset);
         expect(spy.firstCall.args[1]).to.equal(client.type);
         done();
       });
