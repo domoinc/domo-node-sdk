@@ -52,7 +52,7 @@ describe('(Base): Transport', () => {
     nock('https://api.domo.com')
       .get('/oauth/token')
       .query({
-        scope: 'USER',
+        scope: 'user',
         grant_type: 'client_credentials',
       })
       .reply(200, { access_token: 'test' });
@@ -78,7 +78,7 @@ describe('(Base): Transport', () => {
         expect(args.url).to.equal('/oauth/token');
         expect(args.method).to.equal(HTTP_METHODS.GET);
         expect(args.params).to.have.property('grant_type', 'client_credentials');
-        expect(args.params).to.have.property('scope', 'USER');
+        expect(args.params).to.have.property('scope', 'user');
         done();
       });
   });

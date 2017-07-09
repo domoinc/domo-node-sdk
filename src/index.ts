@@ -11,7 +11,7 @@ import { ClientConfigException } from './common/Errors';
 
 const debug = DEBUG('domo-sdk');
 
-export default class DomoClient {
+export class DomoClient {
   transport: Transport;
   datasets: DatasetClient;
   policies: PDPClient;

@@ -4,14 +4,14 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
-    "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "removeComments": false,
     "outDir": "dist",
     "noImplicitAny": false,
-    "declaration": true
+    "declaration": true,
+    "lib": ["es2015"]
   },
   "include": [
     "src/**/*.ts"

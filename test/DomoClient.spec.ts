@@ -10,8 +10,7 @@ import UserClient from '../src/users/UserClient';
 import { ClientConfigException } from '../src/common/Errors';
 import { API_SCOPE } from '../src/common/Constants';
 
-/* tslint:disable-next-line:import-name */
-import DomoClient from '../src';
+import { DomoClient } from '../src';
 
 describe('(Base): DomoClient', () => {
   it('should instantiate', (done) => {

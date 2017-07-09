@@ -103,7 +103,7 @@ export default class Transport {
 
   private renewAccessToken() {
     const scope = this.scopes
-      .map(s => API_SCOPE[s])
+      .map(s => API_SCOPE[s].toLowerCase())
       .join(' ');
 
     const req: Request = {
