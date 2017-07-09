@@ -1,32 +1,51 @@
-import { APIClient } from '../common/APIClient';
-import Transport from '../common/Transport';
+import Transport, { Request } from '../common/Transport';
 import { HTTP_METHODS } from '../common/Constants';
+import { User } from './models';
 
-export default class UserClient implements APIClient {
-  constructor(transport) {
-    super(transport);
+export default class UserClient {
+  urlBase: string = '/v1/users';
+  type: string = 'User';
+  transport: Transport;
 
-    this.urlBase = '/v1/users';
-    this.clientDesc = 'User';
+  constructor(transport: Transport) {
+    this.transport = transport;
   }
 
-  create(user, sendInvite) {
-    return this._create(this.urlBase, user, { sendInvite }, this.clientDesc);
+  create(user: User, sendInvite = true): Promise<User> {
+    const req: Request = {
+      url: this.urlBase,
+      body: user,
+      params: { sendInvite },
+    };
+
+    return this.transport.post(req, this.type);
   }
 
-  get(id) {
-    return this._get(`${this.urlBase}/${id}`, {}, this.clientDesc);
+  get(id: string): Promise<User> {
+    const req: Request = { url: `${this.urlBase}/${id}` };
+    return this.transport.get(req, this.type);
   }
 
-  list(limit, offset) {
-    return this._list(this.urlBase, { limit, offset }, this.clientDesc);
+  list(limit: number, offset: number): Promise<User[]> {
+    const req: Request = {
+      url: this.urlBase,
+      params: { limit, offset },
+    };
+
+    return this.transport.get(req, this.type);
   }
 
-  update(id, user) {
-    return this._update(`${this.urlBase}/${id}`, HTTPMethod.PUT, {}, user, true, this.clientDesc);
+  update(id: string, user: User): Promise<User> {
+    const req: Request = {
+      url: `${this.urlBase}/${id}`,
+      body: user,
+    };
+
+    return this.transport.put(req, this.type);
   }
 
-  delete(id) {
-    return this._delete(`${this.urlBase}/${id}`, this.clientDesc);
+  delete(id: string): Promise<void> {
+    const req: Request = { url: `${this.urlBase}/${id}` };
+    return this.transport.delete(req, this.type);
   }
 }
