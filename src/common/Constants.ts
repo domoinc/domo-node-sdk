@@ -1,6 +1,6 @@
 export enum HTTP_METHODS { GET, POST, PUT, PATCH, DELETE }
 
-export enum UPDATE_METHODS { UPDATE, REPLACE }
+export enum UPDATE_METHODS { UPDATE, REPLACE, APPEND }
 
 export enum API_SCOPE { USER, DATA }
 

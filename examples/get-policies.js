@@ -3,16 +3,13 @@ const { API_SCOPE } = require('../dist/common/Constants');
 
 const clientId = process.env.DOMO_CLIENT_ID;
 const clientSecret = process.env.DOMO_CLIENT_SECRET;
-const userId = '715147833';
+
+const datasetId = 'e10348d6-b0ab-4471-9195-4f862ac3c56c';
+const scopes = [API_SCOPE.DATA];
 const host = 'api.domo.com';
-const scopes = [API_SCOPE.USER];
 
 const domo = new DomoClient(clientId, clientSecret, scopes, host);
 
-domo.users.get(userId)
-  .then(res => { console.log('\nUser', res.email); })
+domo.policies.list(datasetId)
+  .then(res => { console.log(`\nPolicies: ${res.length}`); })
   .catch(console.error);
-
-domo.users.list(3, 0)
-	.then(res => { console.log('\nUser List', res.length); })
-	.catch(console.error);
