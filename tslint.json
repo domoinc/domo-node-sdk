@@ -2,5 +2,7 @@
   "extends": [
     "tslint-config-airbnb"
   ],
-  "rules": {}
+  "rules": {
+    "max-line-length": [true, 120]
+  }
 }
