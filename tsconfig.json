@@ -10,8 +10,7 @@
     "removeComments": false,
     "outDir": "dist",
     "noImplicitAny": false,
-    "declaration": true,
-    "lib": ["es2015"]
+    "declaration": true
   },
   "include": [
     "src/**/*.ts"
