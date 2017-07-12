@@ -47,5 +47,6 @@
     "tslint-config-airbnb": "^5.2.1",
     "tsutils": "^2.5.1",
     "typescript": "^2.4.1"
-  }
+  },
+  "engines":{ "node": ">=6.4.0" }
 }
