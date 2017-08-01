@@ -1,0 +1,7 @@
+test/**/*.spec.ts
+--require ts-node/register
+--compilers ts:ts-node/register
+--reporter list
+--watch-extensions ts
+--recursive
+--colors

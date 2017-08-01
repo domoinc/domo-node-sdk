@@ -1,11 +1,13 @@
-const Domo = require('../src');
+const { DomoClient } = require('../dist');
+const { API_SCOPE } = require('../dist/common/Constants');
 
+let datasetId;
 const clientId = process.env.DOMO_CLIENT_ID;
 const clientSecret = process.env.DOMO_CLIENT_SECRET;
 const host = 'api.domo.com';
-let datasetId;
+const scopes = [API_SCOPE.DATA];
 
-const domo = new Domo(clientId, clientSecret, host);
+const domo = new DomoClient(clientId, clientSecret, scopes, host);
 
 const dataset = {
   name: 'Boba Fett Contracts',
@@ -23,12 +25,10 @@ const dataset = {
   }
 };
 
-
 domo.datasets.create(dataset)
   .then(res => {
+    console.log('\nDataset Created', res.id);
     datasetId = res.id;
-
-    console.log('\nDataset Created', datasetId);
 
     const data = [
       ['Jabba the Hutt', '2017-01-01', '2017-06-01', '', 'Han Solo', 'Endor'],
@@ -46,5 +46,5 @@ domo.datasets.create(dataset)
 
     return domo.datasets.exportData(datasetId, true);
   })
-  .then(res => { console.log('\nDataset Exported:\n', res); })
-  .catch(err => { console.error(err); });
+  .then(console.log)
+  .catch(console.warn);
