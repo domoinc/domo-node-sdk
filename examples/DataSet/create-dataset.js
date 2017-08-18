@@ -1,5 +1,5 @@
-const { DomoClient } = require('../dist');
-const { API_SCOPE } = require('../dist/common/Constants');
+const { DomoClient } = require('../../dist');
+const { API_SCOPE } = require('../../dist/common/Constants');
 
 let datasetId;
 const clientId = process.env.DOMO_CLIENT_ID;
