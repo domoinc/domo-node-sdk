@@ -1,7 +1,6 @@
 const { DomoClient } = require('../../dist');
 const { API_SCOPE } = require('../../dist/common/Constants');
 
-let datasetId;
 const clientId = process.env.DOMO_CLIENT_ID;
 const clientSecret = process.env.DOMO_CLIENT_SECRET;
 const host = 'api.domo.com';
@@ -9,6 +8,7 @@ const scopes = [API_SCOPE.DATA];
 
 const domo = new DomoClient(clientId, clientSecret, scopes, host);
 
+let datasetId;
 const dataset = {
   name: 'Boba Fett Contracts',
   description: 'Keep track of those bounties',
@@ -39,12 +39,12 @@ domo.datasets.create(dataset)
       .map(row => row.join(','))
       .join('\n');
 
+    console.log('.. importing data');
     return domo.datasets.importData(datasetId, csv);
   })
   .then(res => {
-    console.log('\nData Imported: ', datasetId);
-
+    console.log('.. now testing export');
     return domo.datasets.exportData(datasetId, true);
   })
-  .then(console.log)
+  .then(() => console.log('.. success!'))
   .catch(console.warn);
