@@ -1,6 +1,6 @@
 {
   "name": "domo-sdk",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Javascript Domo SDK",
   "main": "dist/index.js",
   "files": [
@@ -48,5 +48,7 @@
     "tsutils": "^2.5.1",
     "typescript": "^2.4.1"
   },
-  "engines":{ "node": ">=6.4.0" }
+  "engines": {
+    "node": ">=6.4.0"
+  }
 }
