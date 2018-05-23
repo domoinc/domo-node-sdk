@@ -2,7 +2,7 @@ export enum HTTP_METHODS { GET, POST, PUT, PATCH, DELETE }
 
 export enum UPDATE_METHODS { UPDATE, REPLACE, APPEND }
 
-export enum API_SCOPE { USER, DATA }
+export enum API_SCOPE { USER, DATA, DASHBOARD, AUDIT }
 
 export enum FILTER_OPERATORS {
   EQUALS,
