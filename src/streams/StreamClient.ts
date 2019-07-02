@@ -96,7 +96,10 @@ export default class StreamClient {
   uploadCompressedPart(id: string, exec: number, part: number, data: string): Promise<StreamExecution> {
     const req: Request = {
       url: `${this.urlBase}/${id}/executions/${exec}/part/${part}`,
-      headers: { 'Content-Type': 'application/gzip' },
+      headers: {
+                'Content-Type': 'text/csv',
+                'Content-Encoding': 'gzip'
+      },
       body: data,
     };
 
