@@ -17,6 +17,7 @@ export interface Policy {
   name?: string;
   type?: string;
   users?: number[];
+  virtualUsers?: string[];
   groups?: number[];
   filters?: PolicyFilter[];
 }
