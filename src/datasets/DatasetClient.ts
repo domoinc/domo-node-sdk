@@ -48,9 +48,9 @@ export default class DatasetClient {
     return this.transport.delete(req, this.type);
   }
 
-  importData(id: string, csv: string): Promise<void> {
+  importData(id: string, csv: string, append: boolean = false): Promise<void> {
     const req: Request = {
-      url: `${this.urlBase}/${id}/data`,
+      url: `${this.urlBase}/${id}/data?updateMethod=${append ? 'APPEND' : 'REPLACE'}`,
       headers: { 'Content-Type': 'text/csv' },
       body: csv,
     };
