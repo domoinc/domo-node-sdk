@@ -1,6 +1,6 @@
 {
-  "name": "@neatcapital/domo-sdk",
-  "version": "2.1.1",
+  "name": "domo-sdk",
+  "version": "2.1.0",
   "description": "Javascript Domo SDK",
   "main": "dist/index.js",
   "files": [
