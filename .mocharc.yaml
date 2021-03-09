@@ -1,0 +1,6 @@
+spec: 'test/**/*.spec.ts'
+require: 'ts-node/register'
+reporter: 'list'
+watch-extensions: 'ts'
+recursive: true
+color: true

@@ -8,8 +8,8 @@
   ],
   "scripts": {
     "lint": "tslint src/**/*.ts --project ./tsconfig.json --type-check",
-    "test": "mocha --opts mocha.opts",
-    "tdd": "mocha --opts mocha.opts --watch",
+    "test": "mocha --config .mocharc.yaml",
+    "tdd": "mocha --config .mocharc.yaml --watch",
     "build": "rm -rf ./dist && tsc",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --opts .mocharc",
     "upload": "npm run test && npm version && npm run build && npm publish",
