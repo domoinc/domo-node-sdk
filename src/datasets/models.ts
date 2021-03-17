@@ -1,6 +1,6 @@
 export interface Column {
   name: string;
-  type: string;
+  type: 'STRING' | 'DECIMAL' | 'LONG' | 'DOUBLE' | 'DATE' | 'DATETIME';
 }
 
 export interface Schema {
@@ -8,9 +8,21 @@ export interface Schema {
 }
 
 export interface DataSet {
+  id?: string;
   name?: string;
-  schema?: Schema;
   description?: string;
+  owner?: {
+    id?: string;
+    name?: string;
+  };
+  columns?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  dataCurrentAt?: string;
+  schema?: Schema;
+  pdpEnabled?: boolean;
+  policies?: Policy[];
+  rows?: number;
 }
 
 export interface Policy {

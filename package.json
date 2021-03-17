@@ -1,6 +1,6 @@
 {
   "name": "domo-sdk",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Javascript Domo SDK",
   "main": "dist/index.js",
   "files": [
@@ -8,8 +8,8 @@
   ],
   "scripts": {
     "lint": "tslint src/**/*.ts --project ./tsconfig.json --type-check",
-    "test": "mocha --opts mocha.opts",
-    "tdd": "mocha --opts mocha.opts --watch",
+    "test": "mocha --config .mocharc.yaml",
+    "tdd": "mocha --config .mocharc.yaml --watch",
     "build": "rm -rf ./dist && tsc",
     "coverage": "NODE_ENV=test istanbul cover _mocha -- --opts .mocharc",
     "upload": "npm run test && npm version && npm run build && npm publish",
@@ -24,30 +24,30 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "debug": "^2.6.6",
+    "debug": "^4.3.1",
     "growl": "^1.10.5",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
-    "@types/chai": "^4.0.1",
-    "@types/debug": "0.0.29",
-    "@types/mocha": "^2.2.41",
-    "@types/nock": "^8.2.1",
-    "@types/node": "^8.0.8",
-    "@types/request": "0.0.45",
-    "@types/request-promise-native": "^1.0.5",
-    "@types/sinon": "^2.3.2",
-    "chai": "^3.5.0",
+    "@types/chai": "^4.2.15",
+    "@types/debug": "4.1.5",
+    "@types/mocha": "^8.2.1",
+    "@types/nock": "^10.0.3",
+    "@types/node": "^14.14.33",
+    "@types/request": "2.48.5",
+    "@types/request-promise-native": "^1.0.17",
+    "@types/sinon": "^9.0.11",
+    "chai": "^4.3.3",
     "istanbul": "^0.4.5",
-    "mocha": "^3.3.0",
-    "nock": "^9.0.13",
-    "sinon": "^2.3.6",
-    "ts-node": "^3.2.0",
-    "tslint": "^5.5.0",
-    "tslint-config-airbnb": "^5.2.1",
-    "tsutils": "^2.5.1",
-    "typescript": "^2.4.1"
+    "mocha": "^8.3.1",
+    "nock": "^13.0.11",
+    "sinon": "^9.2.4",
+    "ts-node": "^9.1.1",
+    "tslint": "^5.20.1",
+    "tslint-config-airbnb": "^5.11.2",
+    "tsutils": "^3.21.0",
+    "typescript": "^4.2.3"
   },
   "engines": {
     "node": ">=6.4.0"

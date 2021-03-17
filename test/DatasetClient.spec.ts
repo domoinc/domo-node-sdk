@@ -119,7 +119,7 @@ describe('(Client): Dataset', () => {
     });
   });
 
-  it('should import csv data', (done) => {
+  it('should import and replce csv data', (done) => {
     const spy = sinon.stub(client.transport, 'put').returns(Promise.resolve());
     expect(client.importData).to.exist;
     expect(client.importData).to.an.instanceOf(Function);
@@ -130,7 +130,26 @@ describe('(Client): Dataset', () => {
 
     promise.then(() => {
       expect(spy.calledOnce).to.be.true;
-      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/data`);
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/data?updateMethod=REPLACE`);
+      expect(spy.firstCall.args[0]).to.have.property('body', csv);
+      expect(spy.firstCall.args[0].headers).to.have.property('Content-Type', 'text/csv');
+      expect(spy.firstCall.args[1]).to.equal(client.type);
+      done();
+    });
+  });
+
+  it('should import and append csv data', (done) => {
+    const spy = sinon.stub(client.transport, 'put').returns(Promise.resolve());
+    expect(client.importData).to.exist;
+    expect(client.importData).to.an.instanceOf(Function);
+
+    const csv = 'example,csv,here';
+    const promise = client.importData(1, csv, true);
+    expect(promise).to.be.an.instanceOf(Promise);
+
+    promise.then(() => {
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0]).to.have.property('url', `${client.urlBase}/1/data?updateMethod=APPEND`);
       expect(spy.firstCall.args[0]).to.have.property('body', csv);
       expect(spy.firstCall.args[0].headers).to.have.property('Content-Type', 'text/csv');
       expect(spy.firstCall.args[1]).to.equal(client.type);
